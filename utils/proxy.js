@@ -1,11 +1,18 @@
-const axios = require('axios');
 const cheerio = require('cheerio');
 
 const proxyGenerator = async () => {
   const ip_addresses = [];
-  const res = await axios('https://www.sslproxies.org/');
-  if (res.status === 200) {
-    const $ = cheerio.load(res.data);
+  let html = '';
+  try {
+    const res = await fetch('https://www.sslproxies.org/');
+    if (!res.ok) return ip_addresses;
+    html = await res.text();
+  } catch {
+    return ip_addresses;
+  }
+
+  if (html) {
+    const $ = cheerio.load(html);
 
     $('td:nth-child(5)').each(function (index) {
       ip_addresses[index] = { protocol: $(this).text() };

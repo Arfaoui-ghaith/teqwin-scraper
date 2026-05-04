@@ -1,4 +1,3 @@
-const axios = require('axios');
 const qs = require('qs');
 const { emsi } = require('./keys');
 const { call } = require('./httpClient');
@@ -11,19 +10,27 @@ const generateToken = async (key) => {
     scope: 'emsi_open',
   });
 
-  const config = {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': 'PostmanRuntime/7.29.2',
-      Host: '',
-    },
-  };
-
-  const res = await axios.post('https://auth.emsicloud.com/connect/token', data, config).catch(() => undefined);
-  if (res !== undefined) {
-    return res?.data?.access_token;
+  let res;
+  try {
+    res = await fetch('https://auth.emsicloud.com/connect/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'PostmanRuntime/7.29.2',
+      },
+      body: data,
+    });
+  } catch {
+    return null;
   }
-  return null;
+
+  if (!res.ok) return null;
+  try {
+    const json = await res.json();
+    return json?.access_token ?? null;
+  } catch {
+    return null;
+  }
 };
 
 const extract = async (text) => {
