@@ -13,7 +13,10 @@ const SCRAPERAPI_KEYS = process.env.SCRAPERAPI_KEYS
       '88a7db8080326ccbf6409e9756f8dc84'
     ];
 
+const MAX_SCRAPE_PAGES = Number(process.env.MAX_SCRAPE_PAGES) || 5;
+
 module.exports = {
   SCRAPERAPI_KEYS,
+  MAX_SCRAPE_PAGES,
 };
 

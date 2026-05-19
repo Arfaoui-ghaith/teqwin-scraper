@@ -1,5 +1,6 @@
 const { call } = require('../../utils/scraperApiClient');
 const cheerio = require('cheerio');
+const { MAX_SCRAPE_PAGES } = require('../../constants');
 
 const SEARCH_BASE =
   'https://www.tanitjobs.com/jobs/?searchId=1779225076.8928&action=search';
@@ -22,9 +23,7 @@ const isPostedThisYear = (date) => {
 const collect = async () => {
   let pageNum = 1;
   const urls = [];
-  const maxPages = Number(process.env.TANITJOBS_MAX_PAGES) || Infinity;
-
-  while (pageNum <= maxPages) {
+  while (pageNum <= MAX_SCRAPE_PAGES) {
     const pageUrl = `${SEARCH_BASE}&page=${pageNum}`;
     const page = await call(pageUrl);
     if (!page.data || page.status !== 200) break;

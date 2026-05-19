@@ -1,5 +1,6 @@
 const { call } = require('./scraper');
 const cheerio = require('cheerio');
+const { MAX_SCRAPE_PAGES } = require('../../constants');
 
 const BASE_URL = 'https://www.optioncarriere.tn';
 const JOB_LINK_SELECTOR = 'main ul li article header h2 a';
@@ -15,7 +16,7 @@ const collect = async () => {
   const urls = [];
   const seen = new Set();
 
-  while (true) {
+  while (pageNum <= MAX_SCRAPE_PAGES) {
     const pageUrl = `${BASE_URL}/emploi?ct=i&s=Stage&l=Tunisie&p=${pageNum}`;
     const page = await call(pageUrl);
     if (!page.data || page.status !== 200) break;
