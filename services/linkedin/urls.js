@@ -9,8 +9,7 @@ const collect = async () => {
   for (const URL of URLS) {
     const page = await call(URL);
     const $ = cheerio.load(page.data);
-    const urls = $("a[class='base-card__full-link absolute top-0 right-0 bottom-0 left-0 p-0 z-[2] outline-offset-[4px]']")
-      .slice(9)
+    const urls = $('a.base-card__full-link[href*="/jobs/view/"]')
       .map(function () {
         return $(this).attr('href');
       })
@@ -22,4 +21,3 @@ const collect = async () => {
 };
 
 module.exports = collect;
-

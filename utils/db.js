@@ -33,7 +33,7 @@ const getDataSource = async () => {
  * Save internship to PostgreSQL. Uses upsert for Company and Skill to avoid duplicates.
  * Intern is upserted by url.
  * @param {Object} data - { company: {...}, internship: {...} }
- * @param {string} source - farojob | keejob | linkedin | optioncarriere
+ * @param {string} source - farojob | keejob | linkedin | optioncarriere | tanitjobs
  */
 const saveInternshipToDb = async (data, source) => {
   const ds = await getDataSource();

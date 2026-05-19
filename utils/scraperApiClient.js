@@ -7,18 +7,29 @@ const { SCRAPERAPI_KEYS } = require('../constants');
 
 const SCRAPERAPI_BASE = 'https://api.scraperapi.com';
 
+const buildScraperUrl = (apiKey, targetUrl, scraperParams = {}) => {
+  const query = new URLSearchParams();
+  query.set('api_key', apiKey);
+  query.set('url', targetUrl);
+  for (const [key, value] of Object.entries(scraperParams)) {
+    if (value != null && value !== false) query.set(key, String(value));
+  }
+  return `${SCRAPERAPI_BASE}?${query.toString()}`;
+};
+
 const call = async (url, options = {}) => {
   if (!SCRAPERAPI_KEYS || SCRAPERAPI_KEYS.length === 0) {
     console.error('ScraperAPI: No API keys configured.');
     return { data: '', status: 500, url };
   }
 
+  const { scraperParams = {}, ...fetchOptions } = options;
   let lastError = null;
   for (let i = 0; i < SCRAPERAPI_KEYS.length; i++) {
     const apiKey = SCRAPERAPI_KEYS[i];
-    const scraperUrl = `${SCRAPERAPI_BASE}?api_key=${apiKey}&url=${encodeURIComponent(url)}`;
+    const scraperUrl = buildScraperUrl(apiKey, url, scraperParams);
     try {
-      const res = await fetch(scraperUrl, { method: 'get', ...options });
+      const res = await fetch(scraperUrl, { method: 'get', ...fetchOptions });
       const data = await res.text();
 
       if (res.status === 200) return { data, status: res.status, url };

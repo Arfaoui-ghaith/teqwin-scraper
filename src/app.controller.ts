@@ -13,14 +13,14 @@ export class AppController {
     return { ok: true };
   }
 
-  // Run one scraper (farojob|keejob|linkedin|optioncarriere)
+  // Run one scraper (farojob|keejob|linkedin|optioncarriere|tanitjobs)
   @Post('scrape/:source')
   @ApiOperation({ summary: 'Run one scraper' })
   @ApiParam({
     name: 'source',
     required: true,
     description: 'Scraper source',
-    enum: ['farojob', 'keejob', 'linkedin', 'optioncarriere'],
+    enum: ['farojob', 'keejob', 'linkedin', 'optioncarriere', 'tanitjobs'],
   })
   async scrapeOne(@Param('source') source: string) {
     return this.scrape.run(source as ScrapeSource);

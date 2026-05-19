@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import path from 'path';
 
-export type ScrapeSource = 'farojob' | 'keejob' | 'linkedin' | 'optioncarriere';
+export type ScrapeSource = 'farojob' | 'keejob' | 'linkedin' | 'optioncarriere' | 'tanitjobs';
 
 export type ScrapedItem = {
   company: { image?: string; name: string; address: string; country: string; countryFlag: string };
@@ -33,6 +33,7 @@ export class ScrapeService {
     keejob: path.join(this.nestRoot, 'services/keejob/index.js'),
     linkedin: path.join(this.nestRoot, 'services/linkedin/index.js'),
     optioncarriere: path.join(this.nestRoot, 'services/optioncarriere/index.js'),
+    tanitjobs: path.join(this.nestRoot, 'services/tanitjobs/index.js'),
   };
 
   async run(source: ScrapeSource): Promise<RunResult> {
@@ -60,7 +61,7 @@ export class ScrapeService {
   }
 
   async runAll() {
-    const sources: ScrapeSource[] = ['farojob', 'keejob', 'linkedin', 'optioncarriere'];
+    const sources: ScrapeSource[] = ['farojob', 'keejob', 'linkedin', 'optioncarriere', 'tanitjobs'];
     const results = [];
     for (const s of sources) {
       // eslint-disable-next-line no-await-in-loop

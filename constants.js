@@ -5,11 +5,12 @@
 const SCRAPERAPI_KEYS = process.env.SCRAPERAPI_KEYS
   ? process.env.SCRAPERAPI_KEYS.split(',').map((k) => k.trim()).filter(Boolean)
   : [
+      'f2dcf85a92bac43ce10433a4e68f3c6b',
       '4bc959f9218af5d1e862ee62064a8f56',
       '23c1327aeb270f44bb141d469c7f9823',
-      'f2dcf85a92bac43ce10433a4e68f3c6b',
-      '6a9989316d627d1f4d5b95a79be3e0cd'
-      // Add more keys here
+      '6a9989316d627d1f4d5b95a79be3e0cd',
+      '9987c5b5428f3584325f63ffe84adf2e',
+      '88a7db8080326ccbf6409e9756f8dc84'
     ];
 
 module.exports = {

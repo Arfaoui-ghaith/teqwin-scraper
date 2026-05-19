@@ -1,6 +1,6 @@
 const collect = require('./urls');
 const cheerio = require('cheerio');
-const { call } = require('../../utils/scraperApiClient');
+const { call } = require('./scraper');
 const { isoCountry } = require('iso-country');
 const parseAddress = require('country-in-text-detector');
 const { decode } = require('html-entities');
