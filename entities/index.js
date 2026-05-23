@@ -7,6 +7,7 @@ const InternshipCompany = new EntitySchema({
     id: { type: 'uuid', primary: true, generated: 'uuid' },
     name: { type: 'varchar', nullable: true, unique: true },
     image: { type: 'varchar', nullable: true },
+    binary_image: { type: 'bytea', nullable: true },
     address: { type: 'varchar', nullable: true },
     country: { type: 'varchar' },
     countryFlag: { type: 'varchar' },

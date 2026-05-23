@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS "internship_company" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "name" VARCHAR UNIQUE,
     "image" VARCHAR,
+    "binary_image" BYTEA,
     "address" VARCHAR,
     "country" VARCHAR NOT NULL,
     "countryFlag" VARCHAR NOT NULL,

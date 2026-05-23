@@ -1,6 +1,7 @@
 const path = require('path');
 const { DataSource } = require('typeorm');
 const { InternshipCompany, InternshipSkill, Internship } = require('../entities');
+const { fetchImageBinary, DEFAULT_IMAGE_URL, isTanitjobsImageUrl } = require('./fetchImageBinary');
 
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
@@ -42,16 +43,22 @@ const saveInternshipToDb = async (data, source) => {
   const internshipRepo = ds.getRepository('Internship');
 
   const companyName = data.company?.name || 'Unknown';
-  const companyImage = data.company?.image || 'https://imageio.forbes.com/i-forbesimg/media/lists/companies/no-pic_416x416.jpg?format=jpg&height=416&width=416&fit=bounds-no-image';
+  const rawImage = data.company?.image || null;
+  const useAvatar =
+    source === 'tanitjobs' || (rawImage && isTanitjobsImageUrl(rawImage));
+  const companyImage = useAvatar ? null : rawImage || DEFAULT_IMAGE_URL;
   const companyAddress = data.company?.address ?? '';
   const companyCountry = data.company?.country || 'Tunisia';
   const companyCountryFlag = data.company?.countryFlag || '🇹🇳';
+
+  const imageBinary = useAvatar ? null : await fetchImageBinary(companyImage);
 
   let company = await companyRepo.findOne({ where: { name: companyName } });
   if (!company) {
     company = companyRepo.create({
       name: companyName,
       image: companyImage,
+      binary_image: imageBinary?.buffer ?? null,
       address: companyAddress,
       country: companyCountry,
       countryFlag: companyCountryFlag,
@@ -59,6 +66,7 @@ const saveInternshipToDb = async (data, source) => {
     await companyRepo.save(company);
   } else {
     company.image = companyImage;
+    company.binary_image = imageBinary?.buffer ?? company.binary_image ?? null;
     company.address = companyAddress;
     company.country = companyCountry;
     company.countryFlag = companyCountryFlag;

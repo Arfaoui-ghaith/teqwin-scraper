@@ -112,13 +112,10 @@ const getDetails = async (content) => {
   const description = getDescriptionHtml($);
   let validThrough = getDeadlineDate($);
   let datePosted = null;
-  let logo;
-
   try {
     const job = JSON.parse($("script[type='application/ld+json']").first().text());
     datePosted = job.datePosted ? new Date(job.datePosted) : null;
     if (!validThrough && job.validThrough) validThrough = new Date(job.validThrough);
-    logo = job.hiringOrganization?.logo;
   } catch {
     // fall back to DOM-only fields
   }
@@ -129,7 +126,7 @@ const getDetails = async (content) => {
   }
 
   const company = {
-    image: logo,
+    image: null,
     name: companyName || `interMe-${TUNISIA.name}`,
     address,
     country: TUNISIA.name,
