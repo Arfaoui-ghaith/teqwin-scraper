@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const { MAX_SCRAPE_PAGES } = require('../../constants');
 
 const SEARCH_BASE =
-  'https://www.linkedin.com/jobs/search?keywords=&location=Tunisie&locationId=&geoId=102134353&f_TPR=&f_JT=I';
+  'https://www.linkedin.com/jobs/search?keywords=Stage%2C Internship%2C Pfe&location=Tunisie&locationId=&geoId=102134353&&geoId=102134353&f_TPR=r2592000&trk=public_jobs_jobs-search-bar_search-submit&position=1';
 
 const collect = async () => {
   const urls = [];
