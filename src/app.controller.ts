@@ -1,6 +1,10 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
-import { ScrapeService, ScrapeSource } from './scrape.service';
+import {
+  ENABLED_SCRAPE_SOURCES,
+  ScrapeService,
+  ScrapeSource,
+} from './scrape.service';
 
 @ApiTags('scrape')
 @Controller()
@@ -13,17 +17,17 @@ export class AppController {
     return { ok: true };
   }
 
-  // Run one scraper (farojob|keejob|linkedin|optioncarriere|tanitjobs)
+  // Run one scraper (farojob|keejob|linkedin|optioncarriere)
   @Post('scrape/:source')
   @ApiOperation({ summary: 'Run one scraper' })
   @ApiParam({
     name: 'source',
     required: true,
-    description: 'Scraper source',
-    enum: ['farojob', 'keejob', 'linkedin', 'optioncarriere', 'tanitjobs'],
+    description: 'Scraper source (tanitjobs is disabled)',
+    enum: ENABLED_SCRAPE_SOURCES,
   })
   async scrapeOne(@Param('source') source: string) {
-    return this.scrape.run(source as ScrapeSource);
+    return this.scrape.run(source);
   }
 
   // Run all scrapers

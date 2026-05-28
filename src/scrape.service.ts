@@ -1,7 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import path from 'path';
 
-export type ScrapeSource = 'farojob' | 'keejob' | 'linkedin' | 'optioncarriere' | 'tanitjobs';
+/** Active scraper targets (tanitjobs is intentionally disabled). */
+export type ScrapeSource = 'farojob' | 'keejob' | 'linkedin' | 'optioncarriere';
+
+export const DISABLED_SCRAPE_SOURCES = ['tanitjobs'] as const;
+
+export const ENABLED_SCRAPE_SOURCES: ScrapeSource[] = [
+  'farojob',
+  'keejob',
+  'linkedin',
+  'optioncarriere',
+];
 
 export type ScrapedItem = {
   company: { image?: string; name: string; address: string; country: string; countryFlag: string };
@@ -33,16 +43,20 @@ export class ScrapeService {
     keejob: path.join(this.nestRoot, 'services/keejob/index.js'),
     linkedin: path.join(this.nestRoot, 'services/linkedin/index.js'),
     optioncarriere: path.join(this.nestRoot, 'services/optioncarriere/index.js'),
-    tanitjobs: path.join(this.nestRoot, 'services/tanitjobs/index.js'),
   };
 
-  async run(source: ScrapeSource): Promise<RunResult> {
-    if (!this.sourceToEntry[source]) {
-      throw new Error(`Unknown source: ${source}`);
+  async run(source: string): Promise<RunResult> {
+    if ((DISABLED_SCRAPE_SOURCES as readonly string[]).includes(source)) {
+      throw new Error(`Scraper source "${source}" is disabled`);
+    }
+    if (!this.sourceToEntry[source as ScrapeSource]) {
+      throw new Error(
+        `Unknown source: ${source}. Enabled: ${ENABLED_SCRAPE_SOURCES.join(', ')}`,
+      );
     }
 
     const started = Date.now();
-    const entry = this.sourceToEntry[source];
+    const entry = this.sourceToEntry[source as ScrapeSource];
 
     // Require and call the scraper in-process.
     // Each scraper exports { run } and saves to PostgreSQL.
@@ -52,7 +66,7 @@ export class ScrapeService {
     const durationMs = Date.now() - started;
     const data = Array.isArray(results) ? results : [];
     return {
-      source,
+      source: source as ScrapeSource,
       ok: true,
       durationMs,
       count: data.length,
@@ -61,7 +75,7 @@ export class ScrapeService {
   }
 
   async runAll() {
-    const sources: ScrapeSource[] = ['farojob', 'keejob', 'linkedin', 'optioncarriere', 'tanitjobs'];
+    const sources: ScrapeSource[] = [...ENABLED_SCRAPE_SOURCES];
     const results = [];
     for (const s of sources) {
       // eslint-disable-next-line no-await-in-loop
