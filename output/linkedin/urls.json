@@ -1,0 +1,19 @@
+{
+  "collectedAt": "2026-05-28T21:40:59.064Z",
+  "searchBase": "https://www.linkedin.com/jobs/search?keywords=Stage%2C Internship%2C Pfe&location=Tunisie&geoId=102134353&f_TPR=r2592000&trk=public_jobs_jobs-search-bar_search-submit",
+  "maxPages": 5,
+  "totalUrls": 0,
+  "urls": [],
+  "pages": [
+    {
+      "pageNum": 0,
+      "searchUrl": "https://www.linkedin.com/jobs/search?keywords=Stage%2C Internship%2C Pfe&location=Tunisie&geoId=102134353&f_TPR=r2592000&trk=public_jobs_jobs-search-bar_search-submit&pageNum=0",
+      "htmlFile": "html/page-0.html",
+      "status": 200,
+      "via": "http",
+      "bytes": 81306,
+      "linksFound": 0,
+      "newLinks": 0
+    }
+  ]
+}

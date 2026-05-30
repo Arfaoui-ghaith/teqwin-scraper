@@ -1,9 +1,9 @@
-const { call } = require('../../utils/httpClient');
+const { call } = require('./scraper');
 const cheerio = require('cheerio');
 const { MAX_SCRAPE_PAGES } = require('../../constants');
 
 const SEARCH_BASE =
-  'https://www.linkedin.com/jobs/search?keywords=Stage%2C Internship%2C Pfe&location=Tunisie&locationId=&geoId=102134353&&geoId=102134353&f_TPR=r2592000&trk=public_jobs_jobs-search-bar_search-submit&position=1';
+  'https://www.linkedin.com/jobs/project-manager-internship-jobs?keywords=Project%20Manager%20Internship&location=United%20States&geoId=103644278&f_TPR=r86400';
 
 const collect = async () => {
   const urls = [];

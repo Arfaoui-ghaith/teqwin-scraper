@@ -19,9 +19,6 @@ export class InternshipScheduleService {
   /** Daily at 10:00 and 17:00 (server local time, or INTERNSHIP_SCRAPE_TZ if set). */
   @Cron('0 10,17 * * *', cronOpts)
   async handleScheduledScrape(): Promise<void> {
-    if (process.env.DISABLE_INTERNSHIP_CRON === '1') {
-      return;
-    }
     if (this.running) {
       this.log.warn('Scheduled internship scrape skipped: previous run still in progress');
       return;

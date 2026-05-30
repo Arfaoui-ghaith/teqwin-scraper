@@ -1,5 +1,5 @@
 const collect = require('./urls');
-const { call } = require('../../utils/httpClient');
+const { call } = require('./scraper');
 const cheerio = require('cheerio');
 const { decode } = require('html-entities');
 const { isoCountry } = require('iso-country');
@@ -11,6 +11,9 @@ const { getUrlsToFetch } = require('../../utils/scrapedUrlsRegistry');
 
 const SOURCE = 'linkedin';
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const REQUEST_DELAY_MS = Number(process.env.SCRAPEDO_REQUEST_DELAY_MS) || 1500;
+
 const getContents = async () => {
   console.log(`[${SOURCE}] Start Linkedin Web Scraping Process...`);
   const urls = await collect();
@@ -21,12 +24,14 @@ const getContents = async () => {
   if (toFetch.length === 0) return [];
   console.log(`[${SOURCE}] Start Fetching & Scraping Data From The Web Pages Contents...`);
 
-  return await Promise.all(
-    toFetch.map(async (url) => {
-      const content = await call(url, { method: 'get' });
-      return content;
-    })
-  );
+  const contents = [];
+  for (let i = 0; i < toFetch.length; i++) {
+    const url = toFetch[i];
+    const content = await call(url, { method: 'get' });
+    contents.push(content);
+    if (i < toFetch.length - 1) await sleep(REQUEST_DELAY_MS);
+  }
+  return contents;
 };
 
 const getDetails = async (content) => {
